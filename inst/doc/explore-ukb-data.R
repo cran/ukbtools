@@ -23,28 +23,16 @@ knitr::opts_chunk$set(
 
 ## ------------------------------------------------------------------------
 #  
-#  ukbxxxx_data <- ukb_df("ukbxxxx")
-#  ukbyyyy_data <- ukb_df("ukbyyyy")
-#  ukbzzzz_data <- ukb_df("ukbzzzz")
-#  
-#  # Merge with your preferred method
-#  my_ukb_data <- plyr::join_all(
-#    list(ukbxxxx_data, ukbyyyy_data, ukbzzzz_data),
-#    by = "eid",
-#    type = "full"
-#  )
+#  my_ukb_key <- ukb_df_field("ukbxxxx", path = "/full/path/to/my/fileset")
 #  
 
 ## ------------------------------------------------------------------------
 #  
-#  ukb_names <- c(
-#    names(ukbxxxx_data),
-#    names(ukbyyyy_data),
-#    names(ukbzzzz_data)
-#  )
+#  ukbxxxx_data <- ukb_df("ukbxxxx")
+#  ukbyyyy_data <- ukb_df("ukbyyyy")
+#  ukbzzzz_data <- ukb_df("ukbzzzz")
 #  
-#  count_ukb_names <- data.frame(table(ukb_names))
-#  dim(count_ukb_names[count_names$Freq > 1, ])
+#  ukb_df_full_join(ukbxxxx_data, ukbyyyy_data, ukbzzzz_data)
 #  
 
 ## ------------------------------------------------------------------------
@@ -87,6 +75,12 @@ knitr::opts_chunk$set(
 
 ## ------------------------------------------------------------------------
 #  
+#  # To plot the frequency of the default ICD codes with respect to BMI
+#  ukb_icd_freq_by(my_ukb_data, reference.var = "body_mass_index_bmi_0_0", freq.plot = TRUE)
+#  
+
+## ------------------------------------------------------------------------
+#  
 #  my_gen_meta <- ukb_gen_meta(my_ukb_data)
 #  my_gen_pcs <- ukb_gen_pcs(my_ukb_data)
 #  
@@ -107,7 +101,7 @@ knitr::opts_chunk$set(
 #  my_gen_rel <- ukb_gen_rel(my_ukb_data)
 #  
 #  # To get a count and plot of degree of relatedness
-#  ukb_gen_rel_count(my_ukb_data, plot = TRUE)
+#  ukb_gen_rel_count(my_gen_rel, plot = TRUE)
 #  
 
 ## ---- eval = FALSE-------------------------------------------------------

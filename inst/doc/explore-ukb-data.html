@@ -12,7 +12,7 @@
 
 <meta name="author" content="Ken B. Hanscombe" />
 
-<meta name="date" content="2017-06-30" />
+<meta name="date" content="2017-11-27" />
 
 <title>Explore UK Biobank data</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Explore UK Biobank data</h1>
 <h4 class="author"><em>Ken B. Hanscombe</em></h4>
-<h4 class="date"><em>2017-06-30</em></h4>
+<h4 class="date"><em>2017-11-27</em></h4>
 
 
 
@@ -80,9 +80,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="preparing-a-ukb-fileset" class="section level2">
 <h2>1. Preparing a UKB fileset</h2>
 <p>Download<sup>§</sup> then decrypt your data and create a UKB fileset (.tab, .r, .html):</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">ukb_unpack</span> ukbxxxx.enc key
-<span class="kw">ukb_conv</span> ukbxxxx.enc_ukb r
-<span class="kw">ukb_conv</span> ukbxxxx.enc_ukb docs</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">ukb_unpack</span> ukbxxxx.enc key
+<span class="ex">ukb_conv</span> ukbxxxx.enc_ukb r
+<span class="ex">ukb_conv</span> ukbxxxx.enc_ukb docs</code></pre></div>
 <p><code>ukb_unpack</code> decrypts your downloaded <code>ukbxxxx.enc</code> file, outputting a <code>ukbxxxx.enc_ukb</code> file. <code>ukb_conv</code> with the <code>r</code> flag converts the decrypted data to a tab-delimited file <code>ukbxxxx.tab</code> and an R script <code>ukbxxxx.r</code> that reads the tab file. The <code>docs</code> flag creates an html file containing a field-code-to-description table (among others).</p>
 <p><br></p>
 <p><sup>§</sup> Full details of the data download and decrypt process are given in the <a href="http://biobank.ctsu.ox.ac.uk/crystal/docs/UsingUKBData.pdf">Using UK Biobank Data</a> documentation .</p>
@@ -96,39 +96,29 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 my_ukb_data &lt;-<span class="st"> </span><span class="kw">ukb_df</span>(<span class="st">&quot;ukbxxxx&quot;</span>)</code></pre></div>
 <p>You can also specify the path to your fileset if it is not in the current directory. For example, if your fileset is in a subdirectory of the working directory called <code>data</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_ukb_data &lt;-<span class="st"> </span><span class="kw">ukb_df</span>(<span class="st">&quot;ukbxxxx&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;/full/path/to/my/fileset&quot;</span>)</code></pre></div>
-<p>Use <code>ukb_df_field</code> to create a field-to-descriptive name key.</p>
+<p>Use <code>ukb_df_field</code> to create a field-to-descriptive name key, as dataframe or named lookup vector.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_ukb_key &lt;-<span class="st"> </span><span class="kw">ukb_df_field</span>(<span class="st">&quot;ukbxxxx&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;/full/path/to/my/fileset&quot;</span>)</code></pre></div>
 <p><br></p>
 <p><strong>Note:</strong> You can move the three files in your fileset after creating them with <code>ukb_conv</code>, but they should be kept together. <code>ukb_df()</code> automatically updates the read call in the R source file to point to the correct directory (the current directly by default, or the directory specified by <code>path</code>).</p>
 <p><br></p>
 <p><br></p>
 <blockquote>
 <p><strong>Memory and efficiency</strong></p>
-<p>I highly recommend saving your new UKB dataset with <code>save(my_ukb_data, file = &quot;my_ukb_data.rda&quot;)</code>. You can load the data with <code>load(&quot;my_ukb_data.rda&quot;)</code>. Creating a UKB dataset from my largest UKB fileset which included a 2.6 GB .tab file, took approximately 10 mins; loading the same dataset after the <code>save</code> procedure, took about 20 seconds. The saved file was about 200 MB.</p>
+<p>I highly recommend saving your new UKB dataset with <code>save(my_ukb_data, file = &quot;my_ukb_data.rda&quot;)</code>. You can load the data with <code>load(&quot;my_ukb_data.rda&quot;)</code>. Creating a UKB dataset from my largest UKB fileset which included a 2.6 GB .tab file, took approximately 8 mins; loading the same dataset after the <code>save</code> procedure, took about 20 seconds. The saved file was about 200 MB.</p>
 </blockquote>
 <p><br> <br></p>
 <div id="multiple-downloads" class="section level3">
 <h3>2.1 Multiple downloads</h3>
-<p>If you have multiple UKB downloads, tidy then merge them.</p>
+<p>If you have multiple UKB downloads, first read then merge them with your preferred method. <code>ukbtools</code> includes the function <code>ukb_df_full_join</code> which is a thin wrapper around <code>dplyr::full_join</code> applied recursively with <code>purrr::reduce</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ukbxxxx_data &lt;-<span class="st"> </span><span class="kw">ukb_df</span>(<span class="st">&quot;ukbxxxx&quot;</span>)
 ukbyyyy_data &lt;-<span class="st"> </span><span class="kw">ukb_df</span>(<span class="st">&quot;ukbyyyy&quot;</span>)
 ukbzzzz_data &lt;-<span class="st"> </span><span class="kw">ukb_df</span>(<span class="st">&quot;ukbzzzz&quot;</span>)
 
-<span class="co"># Merge with your preferred method</span>
-my_ukb_data &lt;-<span class="st"> </span>plyr::<span class="kw">join_all</span>(
-  <span class="kw">list</span>(ukbxxxx_data, ukbyyyy_data, ukbzzzz_data),
-  <span class="dt">by =</span> <span class="st">&quot;eid&quot;</span>,
-  <span class="dt">type =</span> <span class="st">&quot;full&quot;</span>
-)</code></pre></div>
+<span class="kw">ukb_df_full_join</span>(ukbxxxx_data, ukbyyyy_data, ukbzzzz_data)</code></pre></div>
 <p><br></p>
-<p><strong>Note:</strong> You will have at least one variable duplicated in the different downloads, the unique individual identifier <code>eid</code>. Counting the repeated variables (and the number of repeats of each) can give you a sense of the expected number of variables in your merged dataset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ukb_names &lt;-<span class="st"> </span><span class="kw">c</span>(
-  <span class="kw">names</span>(ukbxxxx_data),
-  <span class="kw">names</span>(ukbyyyy_data),
-  <span class="kw">names</span>(ukbzzzz_data)
-)
-
-count_ukb_names &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">table</span>(ukb_names))
-<span class="kw">dim</span>(count_ukb_names[count_names$Freq &gt;<span class="st"> </span><span class="dv">1</span>, ])</code></pre></div>
+<p><strong>Note:</strong> The join key is set to “eid” only (default value of the <code>by</code> parameter). Any additional variables common to any two tables will have “.x” and “.y” appended to their names. If you are satisfied the additional variables are identical to the original, the copies can be safely deleted. For example, if <code>setequal(my_ukb_data$var, my_ukb_data$var.x)</code> is <code>TRUE</code>, then my_ukb_data$var.x can be dropped. A <code>dlyr::full_join</code> is like the set operation union in that all abservation from all tables are included, i.e., all samples are included even if they are not included in all datasets.</p>
+<p><br></p>
+<p>Repeated variable names <strong>within</strong> UKB datasets are unlikely to occur. <code>ukb_df</code> creates variable names by combining a snake_case descriptor with the variable’s <em>index</em> and <em>array</em>. This should be sufficient to uniquely identify the variable. However, if an <em>index_array</em> combination is incorrectly repeated in the original UKB data, this will result in a duplicated variable name. We observed two instances. The variables were encoded <em><field>–0.0</em>, <em><field>–1.0</em>, <em><field>––1.0</em>, and <code>ukb_df</code> created a variable named <em>var_0_0</em>, <em>var_1_0</em>, <em>var_1_0</em>. This is probably a typo that should have been <em><field>–0.0</em>, <em><field>–1.0</em>, <em><field>–2.0</em>, consistent with UKB official documentation describing the field as having 3 values for index. We have provided <code>ukb_df_duplicated_names</code> to identify duplicated names within a dataset. This will allow the user to make changes as appropriate. We expect the occurrence of such duplicates will be rare.</p>
 <p><br> <br></p>
 </div>
 </div>
@@ -138,21 +128,21 @@ count_ukb_names &lt;-<span class="st"> </span><span class="kw">data.frame</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ukb_context</span>(my_ukb_data, <span class="dt">nonmiss.var =</span> <span class="st">&quot;my_variable_of_interest&quot;</span>)</code></pre></div>
 <p><br></p>
 <p>It is also possible to supply a logical vector with <code>subset.var</code> to define the subset and reference sample. This is particularly useful for understanding a subgroup within the UKB study, e.g., obese individuals below age 50.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgroup_of_interest &lt;-<span class="st"> </span>(my_ukb_data$bmi &gt;<span class="st"> </span><span class="dv">40</span> &amp;<span class="st"> </span>my_ukb_data$age &lt;<span class="st"> </span><span class="dv">50</span>) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">subgroup_of_interest &lt;-<span class="st"> </span>(my_ukb_data<span class="op">$</span>bmi <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span> <span class="op">&amp;</span><span class="st"> </span>my_ukb_data<span class="op">$</span>age <span class="op">&lt;</span><span class="st"> </span><span class="dv">50</span>) 
 <span class="kw">ukb_context</span>(my_ukb_data, <span class="dt">subset.var =</span> subgroup_of_interest)</code></pre></div>
 <p><br> <br></p>
 </div>
-<div id="retreiving-icd-diagnoses" class="section level2">
-<h2>4. Retreiving ICD diagnoses</h2>
+<div id="retrieving-icd-diagnoses" class="section level2">
+<h2>4. Retrieving ICD diagnoses</h2>
 <p>All ICD related functions begin <code>ukb_icd_</code>. Type <code>ukb_icd_</code> tab to see the family of functions. The full ICD “code-meaning” tables are available as datasets (<code>icd9codes</code>, <code>icd10codes</code>). ICD chapter-level tables describing disease blocks are also available for query as datasets (<code>icd9chapters</code>, <code>icd10chapters</code>)</p>
 <p><br></p>
-<p>To retrieve the full diagnosis of an individual</p>
+<p>To retrieve the full diagnosis of an individual (combine multiple individuals with <code>c()</code>)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ukb_icd_diagnosis</span>(my_ukb_data, <span class="dt">id =</span> <span class="st">&quot;0000000&quot;</span>, <span class="dt">icd.version =</span> <span class="dv">10</span>)</code></pre></div>
 <p><br></p>
-<p>To retrieve the “meaning” of an ICD code use <code>icd_code</code>. You can look up multiple codes by concatenating them.</p>
+<p>To retrieve the “meaning” of an ICD code use <code>icd_code</code>. Again, you can look up multiple codes by combining them with <code>c()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ukb_icd_code_meaning</span>(<span class="dt">icd.code =</span> <span class="st">&quot;I74&quot;</span>, <span class="dt">icd.version =</span> <span class="dv">10</span>)</code></pre></div>
 <p><br></p>
-<p>Search for a class of diseases with a keyword</p>
+<p>Search for a class of diseases with a keyword. Supplying multiple keywords with <code>c()</code>, will return all ICD entries containing <em>any</em> of the keywords.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ukb_icd_keyword</span>(<span class="st">&quot;cardio&quot;</span>, <span class="dt">icd.version =</span> <span class="dv">10</span>)</code></pre></div>
 <p><br></p>
 <p>You can calculate the prevalence of a diagnosis in the UKB study (or a subset of the full sample) using <code>ukb_icd_prevalence</code>. The <code>icd.diagnosis</code> argument takes a regular expression, and so can also be used to retrieve prevalence of a disease “class”, i.e., the proportion of individuals with <em>any</em> diagnosis in the disease class.</p>
@@ -164,6 +154,12 @@ count_ukb_names &lt;-<span class="st"> </span><span class="kw">data.frame</span>
 
 <span class="co"># ICD-10 chapter 2, C00-D49, Neoplasms </span>
 <span class="kw">ukb_icd_prevalence</span>(my_ukb_data, <span class="dt">icd.version =</span> <span class="dv">10</span>, <span class="dt">icd.diagnosis =</span> <span class="st">&quot;C|D[0-4].&quot;</span>)</code></pre></div>
+<p><br></p>
+<p>To retrieve frequency for one or more ICD diagnoses by the levels of a reference variable, e.g., sex (male or female) use <code>ukb_icd_freq_by</code>. If the variable is continuous, it is divided into N approximately equal-sized groups (default = 10) within which ICD diagnosis frequency is calculated. ukb_icd_freq_by also includes an option to produce a figure of ICD diagnosis frequency by reference variable. Diagnoses of interest are passed to <code>icd.code</code>. The default ICD codes are the WHO top 3 cause of death worldwide (2015): coronary artery disease (CAD), cerebrovascular disease/ stroke, lower respiratory tract infection (LTRI).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To plot the frequency of the default ICD codes with respect to BMI</span>
+<span class="kw">ukb_icd_freq_by</span>(my_ukb_data, <span class="dt">reference.var =</span> <span class="st">&quot;body_mass_index_bmi_0_0&quot;</span>, <span class="dt">freq.plot =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><br></p>
+<p><strong>Note.</strong> Setting <code>freq.plot = FALSE</code> (default) returns a dataframe of the frequencies. Values for the reference variable group ranges are in the column “group”.</p>
 <p><br> <br></p>
 </div>
 <div id="retrieving-genetic-metadata" class="section level2">
@@ -175,7 +171,7 @@ count_ukb_names &lt;-<span class="st"> </span><span class="kw">data.frame</span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_gen_meta &lt;-<span class="st"> </span><span class="kw">ukb_gen_meta</span>(my_ukb_data)
 my_gen_pcs &lt;-<span class="st"> </span><span class="kw">ukb_gen_pcs</span>(my_ukb_data)</code></pre></div>
 <p><br> <br></p>
-<p>A list of IDs for recommended exclusions and heterozygosity outliers (+/- 3*SD) can be retreived</p>
+<p>A list of IDs for recommended exclusions and heterozygosity outliers (+/- 3*SD) can be retrieved</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ukb_gen_excl</span>(my_ukb_data)
 <span class="kw">ukb_gen_het</span>(my_ukb_data)</code></pre></div>
 <p>For a <code>data.frame</code> of raw heterozygosity data</p>
@@ -185,7 +181,7 @@ my_gen_pcs &lt;-<span class="st"> </span><span class="kw">ukb_gen_pcs</span>(my_
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_gen_rel &lt;-<span class="st"> </span><span class="kw">ukb_gen_rel</span>(my_ukb_data)
 
 <span class="co"># To get a count and plot of degree of relatedness</span>
-<span class="kw">ukb_gen_rel_count</span>(my_ukb_data, <span class="dt">plot =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="kw">ukb_gen_rel_count</span>(my_gen_rel, <span class="dt">plot =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><br> <br></p>
 </div>
 <div id="read-and-write" class="section level2">
@@ -218,7 +214,7 @@ my_sample_file &lt;-<span class="st"> </span><span class="kw">ukb_gen_read_sampl
 <p><strong>Note.</strong> The exclusions referred to in this section are the combined UKB recommended exclusions, Affymetrix quality control for samples, bileve genotype quality control, heterozygosity outliers (+/- 3*SD), genetic ethnicity outliers (based on Genetic Ethnic Grouping, field code 22006), and one random member of each related pair (including Duplicates/MZ twins, 1st-, 2nd-, and 3rd-degree relatives).</p>
 <p><br></p>
 <p><strong>BGENIE</strong> does not have an option to read exclusions. You can replace data values in a phenotype with <code>NA</code> where the individual is to-be-excluded based on genetic metadata considerations. Writing the updated variable to your phenotype file (with the supplied write functions), effectively excludes the individuals from any analysis.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_ukb_data$height_excl_na &lt;-<span class="st"> </span><span class="kw">ukb_gen_excl_to_na</span>(my_ukb_data, <span class="dt">x =</span> <span class="st">&quot;height&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_ukb_data<span class="op">$</span>height_excl_na &lt;-<span class="st"> </span><span class="kw">ukb_gen_excl_to_na</span>(my_ukb_data, <span class="dt">x =</span> <span class="st">&quot;height&quot;</span>)</code></pre></div>
 <p><br></p>
 <p><strong>PLINK</strong> <code>--remove</code> takes a space- or tab-delimited file with family IDs in the first column and individual IDs in the second column, without column names. See <a href="https://www.cog-genomics.org/plink/1.9/filter#indiv">PLINK input filtering</a> for further details. (The missing value approach described above also works for PLINK.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ukb_gen_write_plink_excl</span>(<span class="st">&quot;path/to/plink_input_file&quot;</span>)</code></pre></div>
