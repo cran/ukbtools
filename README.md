@@ -6,17 +6,17 @@
 
 <br>
 
-> __ukbtools: An R package to manage and query UK Biobank data__
->
-> Ken B Hanscombe, Jonathan R I Coleman, Matthew Traylor, Cathryn M Lewis
->
-> bioRxiv 158113; doi: https://doi.org/10.1101/158113
+## Citing ukbtools
+
+If you use ukbtools in any published work, please cite:
+
+Hanscombe K.B., Coleman J.R.I., Traylor M., and Lewis C.M. _ukbtools: An R package to manage and query UK Biobank data._ bioRxiv 158113; doi: [https://doi.org/10.1101/158113](https://doi.org/10.1101/158113)
 
 <br>
 
 ## Overview
 
-After downloading and decrypting your UK Biobank (UKB) data with the supplied [UKB programs] (http://biobank.ctsu.ox.ac.uk/crystal/docs/UsingUKBData.pdf), you have multiple files that need to be brought together to give you a dataset to explore. The data file has column names that are edited field-codes from the [UKB data showcase](http://www.ukbiobank.ac.uk/data-showcase/). `ukbtools` makes it easy to collapse the multiple UKB files into a single dataset for analysis, in the process giving meaningful names to the variables. The package also includes functionality to retrieve ICD diagnoses, explore a sample subset in the context of the UKB sample, and collect genetic metadata.
+After downloading and decrypting your UK Biobank (UKB) data with the supplied [UKB programs] (http://biobank.ctsu.ox.ac.uk/crystal/docs/UsingUKBData.pdf), you have multiple files that need to be brought together to give you a dataset to explore. The data file has column names that are edited field-codes from the [UKB data showcase](http://www.ukbiobank.ac.uk/data-showcase/). ukbtools makes it easy to collapse the multiple UKB files into a single dataset for analysis, in the process giving meaningful names to the variables. The package also includes functionality to retrieve ICD diagnoses, explore a sample subset in the context of the UKB sample, and collect genetic metadata.
 
 <br>
 
@@ -28,13 +28,13 @@ After downloading and decrypting your UK Biobank (UKB) data with the supplied [U
 install.packages("ukbtools")
 
 # Install latest development version
-devtools::install_github("kenhanscombe/ukbtools", build_vignettes = TRUE, dependencies = TRUE)
+devtools::install_github("kenhanscombe/ukbtools", dependencies = TRUE)
 
 ```
 
 <br>
 
-__Note:__ This package is in beta - it is feature complete but may contain unknown bugs. If anything does not work, first re-install the package `devtools::install_github("kenhanscombe/ukbtools", build_vignettes = TRUE, dependencies = TRUE, force = TRUE)` to get the latest development version. If it is still not working, [let me know](https://github.com/kenhanscombe/ukbtools/issues) and I'll fix it.
+__Note:__ This package is in beta - it is feature complete but may contain unknown bugs. If anything does not work, first re-install the package `devtools::install_github("kenhanscombe/ukbtools", dependencies = TRUE, force = TRUE)` to get the latest development version. If it is still not working, [let me know](https://github.com/kenhanscombe/ukbtools/issues) and I'll fix it.
 
 <br>
 
@@ -79,7 +79,7 @@ You can also specify the path to your fileset if it is not in the current direct
 
 ```{r, eval = FALSE}
 
-my_ukb_data <- ukb_df("ukbxxxx", path = "/full/path/to/my/data/")
+my_ukb_data <- ukb_df("ukbxxxx", path = "/full/path/to/my/data")
 
 ```
 
@@ -93,7 +93,7 @@ __Note:__ You can move the three files in your fileset after creating them with 
 
 ## Other tools
 
-Other tools in the package are described in the vignette "Explore UK Biobank Data"
+All tools are described on the [ukbtools webpage](https://kenhanscombe.github.io/ukbtools/) and in the package vignette "Explore UK Biobank Data"
 
 ```{r, eval = FALSE}
 

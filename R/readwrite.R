@@ -91,6 +91,8 @@ ukb_gen_write_plink <- function(x, path, ukb.variables, ukb.id = "eid", na.strin
 
 #' Writes a PLINK format file for combined exclusions
 #'
+#' @description \strong{Defunct. See help("ukb_defunct")}.
+#
 #' Writes a combined exclusions file including UKB recommended exclusions, heterozygosity exclusions (+/- 3*sd from mean), genetic ethnicity exclusions (based on the UKB genetic ethnic grouping variable, field 1002), and relatedness exclusions (a randomly-selected member of each related pair). For exclusion of individuals from a genetic analysis, the PLINK flag \code{--remove} accepts a space/tab-delimited text file with family IDs in the first column and within-family IDs in the second column (i.e., FID IID), without a header.
 #'
 #' @param path A path to a file.
@@ -106,14 +108,14 @@ ukb_gen_write_plink <- function(x, path, ukb.variables, ukb.id = "eid", na.strin
 #' }
 #'
 ukb_gen_write_plink_excl <- function(path) {
-
-  utils::write.table(
-    ukb_meta_excl_plink,
-    file = path,
-    quote = FALSE,
-    row.names = FALSE,
-    col.names = FALSE
-  )
+  ukb_defunct()
+  # utils::write.table(
+  #   ukb_meta_excl_plink,
+  #   file = path,
+  #   quote = FALSE,
+  #   row.names = FALSE,
+  #   col.names = FALSE
+  # )
 }
 
 
@@ -124,9 +126,9 @@ ukb_gen_write_plink_excl <- function(path) {
 #' Writes a space-delimited file with a header, missing character set to "-999", and observations (i.e. UKB subject ids) in sample file order. Use this function to write phenotype and covariate files for downstream genetic analysis in \href{https://jmarchini.org/bgenie/}{BGENIE} - the format is the same.
 #'
 #' @param x A UKB dataset.
-#' @param path A path to a file.
-#' @param ukb.sample Path to the UKB sample file.
+#' @param ukb.sample A UKB sample file.
 #' @param ukb.variables A character vector of either the phenotypes for a BGENIE phenotype file, or covariates for a BGENIE covariate file.
+#' @param path A path to a file.
 #' @param ukb.id The eid variable name (default = "eid").
 #' @param na.strings Character string to be used for missing value in output file. Default = "-999"
 #'
@@ -147,20 +149,21 @@ ukb_gen_write_plink_excl <- function(path) {
 #' ukb_gen_write_bgenie(
 #'    my_ukb_data,
 #'    ukb.sample = my_ukb_sample,
-#'    path = "my_ukb_bgenie.pheno",
 #'    ukb.variables = c("height", "weight", "iq")
+#'    path = "my_ukb_bgenie.pheno",
 #' )
 #'
 #' ukb_gen_write_bgenie(
 #'    my_ukb_data,
 #'    ukb.sample = my_ukb_sample,
-#'    path = "my_ukb_bgenie.cov",
 #'    ukb.variables = c("age", "socioeconomic_status", "genetic_pcs")
+#'    path = "my_ukb_bgenie.cov",
 #' )
 #' }
 #'
-ukb_gen_write_bgenie <- function(x, ukb.sample, path, ukb.variables,
-                                 ukb.id = "eid", na.strings = "-999") {
+ukb_gen_write_bgenie <- function(
+  x, ukb.sample, ukb.variables, path, ukb.id = "eid", na.strings = "-999") {
+
   names(ukb.sample)[1] <- ukb.id
 
   ukb.sample %>%
