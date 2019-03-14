@@ -1,11 +1,30 @@
 
-# ukbtools 0.11.0
+# ukbtools 0.11.1
 
-_Development version_
+Test data:
+
+Added example UKB data ukbXXXX.tab, ukbXXXX.r, ukbXXXX.html to test the 'read'
+and 'summarise' functionality `ukb_df`, `ukb_df_field`, and `ukb_context`. See
+the section "An example fileset" in the vignette for details.
 
 Updated functionality:
 
-* `ukb_df`: Replaced readr::read_tsv with data.table::fread for faster read. Also includes an `n_threads` argument passed to `data.table::fread`, which may make read faster. Column names now include field code to ensure names are unique (UK Biobank sometimes use the same description for more than one variable)
+`ukb_icd_freq_by` with `freq.plot = TRUE` plots a barplot for categorical
+reference variables, and plots diagnosis frequencies at the midpoint of each
+group for quatitative reference variables.
+
+
+Webpage:
+
+The [ukbtools webpage](https://kenhanscombe.github.io/ukbtools/) has been
+rebuilt with pkgdown and includes the vignette under the Articles tab.
+
+
+# ukbtools 0.11.0
+
+Updated functionality:
+
+* `ukb_df`: Replaced `readr::read_tsv` with `data.table::fread` for faster read. Also includes an `n_threads` argument passed to `data.table::fread`, which may make read faster. Column names now include field code to ensure names are unique (UK Biobank sometimes use the same description for more than one variable)
 
 Defunct functionality:
 
