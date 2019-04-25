@@ -1,13 +1,13 @@
-9150faedd15d886bba6f38e7cfecf065 *DESCRIPTION
+b2299ad82053f4c89e9caa9eff839fd1 *DESCRIPTION
 09d0a2062b6745d979e0b89748e74e26 *NAMESPACE
-cd943de98630170ad14cf12262da91b0 *NEWS.md
+6e80a79a32cc6032b3f963faf36db4e9 *NEWS.md
 c39039eb5a57fab6d140dae01d34bed4 *R/context.R
 b7aa3502df780be92cf1a5aa42058649 *R/data.R
 96c6a4768064a0de9d57d41a5fa75e2c *R/diagnosis.R
 a54ca6bf97edd68890eb02c2c6e9c46e *R/genetics_qc.R
 c8568e419cc3c5674c4389540c2c3a74 *R/metadata.R
 06ffb3c7387a45b1963fd941f554804c *R/readwrite.R
-420056af6ea1c5d3e53687356679ab13 *R/ukb_dataset.R
+f08b994716721b5ed069ea3958eb1c42 *R/ukb_dataset.R
 cf11b3cc85951d74772387adab5d9c8a *R/ukbtools.R
 f595cd37e3617242b33a546abc5dbcc7 *R/utils.R
 4246f1c46b0afd9c27285d381d483a46 *README.md
@@ -20,7 +20,7 @@ af112ab275170a18c517621028f202a4 *data/icd9codes.rda
 68da03b04af2d729f48e63b88bbed1d4 *inst/CITATION
 3bc084573e688c3688756f40b91a8549 *inst/doc/explore-ukb-data.R
 1f2f6d0240323fb6b2128243a6011d88 *inst/doc/explore-ukb-data.Rmd
-33fc46194824f05387b679dcd9fef1a1 *inst/doc/explore-ukb-data.html
+4f238c0da85abfa2c0c5c2e762f05ef6 *inst/doc/explore-ukb-data.html
 40ec16b990dca6d5ac3261fdf2d09030 *inst/extdata/ukbxxxx.html
 a775679cfee9bd75cb41e91aa7fcbc2f *inst/extdata/ukbxxxx.r
 90755e4dd58b5589bb13875611e6e856 *inst/extdata/ukbxxxx.tab
